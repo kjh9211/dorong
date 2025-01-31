@@ -1,3 +1,12 @@
+#==============================================================
+# © 2025 kjh9211, All rights reserved.
+#==============================================================
+# Don't erase this text!!
+#==============================================================
+# Owner: kjh9211
+# Developer: kjh9211
+# Use: Only Dorong Online server(Discord server id: 1334423417507676202)
+#==============================================================
 option:
     logo_rgb= asdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdf
 #
@@ -35,38 +44,17 @@ on inventory close:
         loop 54 times:
             set {chest.sug::%loop-num%} to slot loop-num -1 of event-inventory
 #
-command /chest [<text>] [<text>]:
+command /chest [<text>]:
     permission: skript.dorong.top_of_admin
     trigger:
-        if arg 1 is not set:
-            send "어떤 상자를 잠굴지, 열지를 골라주세요"
+        if arg 1 is "닫기":
+            set {chest.open} to "false"
+            send "{@logo_rgb} 모든 상자을 여는것을 막았습니다."
             stop
-        if {chest.list::*} contains arg 1:
-            if arg 2 is not set:
-                send "%arg 1% 상자를 열지 말지를 골라주세요"
-                stop
-                if arg 2 is "닫기":
-                    set {chest.open.%arg 1%} to "false"
-                    send "{@logo_rgb} %arg 1% 상자을 여는것을 막았습니다."
-                    stop
-                if arg 2 is "열기":
-                    set {chest.open.%arg 1%} to "true"
-                    send "{@logo_rgb} %arg 1% 상자을 열었습니다."
-                    stop
-        else if arg 1 is "모두":
-            if arg 2 is not set:
-                send "모든 상자를 열지 말지를 골라주세요"
-                stop
-                if arg 2 is "닫기":
-                    set {chest.open.cos} to "false"
-                    set {chest.open.sinsang} to "false"
-                    set {chest.open.sug} to "false"
-                    send "{@logo_rgb} 모든 상자을 여는것을 막았습니다."
-                    stop
-                if arg 2 is "열기":
-                    set {chest.open.%arg 1%} to "true"
-                    send "{@logo_rgb} 모든 상자을 열었습니다."
-                    stop
+        if arg 1 is "열기":
+            set {chest.open} to "true"
+            send "{@logo_rgb} 모든 상자을 열었습니다."
+            stop
 #
 command /check_is_key:
     trigger:
@@ -77,11 +65,16 @@ command /check_is_key:
             send "키 여부 확인결과: 키가 맞습니다"
             stop
 #
-command /b [<text>]:
+command /상자 [<text>]:
     trigger:
         if arg 1 is not set:
             send "뽑을 상자를 골라주세요"
             stop
+        if {chest.open} is not "true":
+            send "현재 관리자가 상자를 여는것을 막았습니다."
+            stop
+        if nbt compound of player's tool doesn't have nbt tag "is_key":
+            send "이 아이템은 상자키가 아닙니다"
         set {chest.open.%player%} to "true"
         if arg 1 is "코스":
             set {chances.%player%} to {chest.cos::*}
@@ -170,7 +163,60 @@ command /b [<text>]:
         # 2. 코드에서 설정한 아이템의 번호를 찾는다.(1번째 칸에 넣은건 0번이다)
         # 3. 확률을 설정한다.(1,10 이면 10% 이고 10,27 이면 18% 이다)
         # 4. 스크립트를 리로드한다.
-
-
         give {chest.give.%player%} to player
         remove 1 of player's tool from player's tool
+#
+on rightclick:
+    if targeted block of player is silver shulker box:
+        if nbt of player's tool's keytype is "코스":
+            execute player command "/b 코스"
+    if targeted block of player is yellow shulker box:
+        if nbt of player's tool's keytype is "신상":
+            execute player command "/b 신상"
+    if targeted block of player is blue shulker box:
+        if nbt of player's tool's keytype is "추천":
+            execute player command "/b 추천"
+#
+command /givekeyitem:
+    permission: skript.dorong.dev
+    trigger:
+        set {_item} to 1 diamond named "코스상자키" with lore "이 아이템은 코스상자키입니다."
+        set nbt of {_item} to "{is_key:1b, keytype:코스}"  # is_key 태그 추가
+        give {_item} to player
+        set {_item} to 1 diamond named "신상상자키" with lore "이 아이템은 신상상자키입니다."
+        set nbt of {_item} to "{is_key:1b, keytype:신상}"  # is_key 태그 추가
+        give {_item} to player
+        set {_item} to 1 diamond named "추천상자키" with lore "이 아이템은 추천상자키입니다."
+        set nbt of {_item} to "{is_key:1b, keytype:추천}"  # is_key 태그 추가
+        give {_item} to player
+        send "상자키 아이템을 지급했습니다!" to player
+#
+command /credit:
+    trigger:
+        send "=======Dorong Online======="
+        wait 1 seconds
+        send "===========Owner==========="
+        wait 1 seconds
+        send "Dron"
+        wait 1 seconds
+        send "===========Admin==========="
+        wait 1 seconds
+        send "sdsd"
+        wait 1 seconds
+        send "=======Top developer======="
+        wait 1 seconds
+        send "Blue"
+        wait 1 seconds
+        send "=========Developer========="
+        wait 1 seconds
+        send "qmftm"
+        wait 1 seconds
+        send "kjh92111547"
+        wait 1 seconds
+        send "==========================="
+        wait 1 seconds
+        send "and...."
+        wait 1 seconds
+        send "%player% You..."
+        wait 2 seconds
+        send "Thank you for playing!"
