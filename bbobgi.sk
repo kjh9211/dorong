@@ -1,0 +1,176 @@
+option:
+    logo_rgb= asdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdf
+#
+command /뽑기아이템설정 [<text>]:
+    permission: skript.dorong.admin
+    trigger:
+        if arg 1 is "코스":
+            set {_gui} to chest inventory with 6 rows named "'코스'키를 사용하면 어떤거를 랜덤으로 지급할까요?"
+            loop 54 times:
+                set slot loop-num -1 of {_gui} to {chest.cos}
+            open {_gui} to player
+        #
+        if arg 1 is "신상":
+            set {_gui} to chest inventory with 6 rows named "'신상'키를 사용하면 어떤거를 랜덤으로 지급할까요?"
+            loop 54 times:
+                set slot loop-num -1 of {_gui} to {chest.sinsang}
+            open {_gui} to player
+        #
+        if arg 1 is "추천":
+            set {_gui} to chest inventory with 6 rows named "'추천'키를 사용하면 어떤거를 랜덤으로 지급할까요?"
+            loop 54 times:
+                set slot loop-num -1 of {_gui} to {chest.sug}
+            open {_gui} to player
+#
+on inventory close:
+    event-inventory's name is "'코스'키를 사용하면 어떤거를 랜덤으로 지급할까요?":
+        loop 54 times:
+            set {chest.cos::%loop-num%} to slot loop-num -1 of event-inventory
+    #
+    event-inventory's name is "'신상'키를 사용하면 어떤거를 랜덤으로 지급할까요?":
+        loop 54 times:
+            set {chest.sinsang::%loop-num%} to slot loop-num -1 of event-inventory
+    #
+    event-inventory's name is "'추천'키를 사용하면 어떤거를 랜덤으로 지급할까요?":
+        loop 54 times:
+            set {chest.sug::%loop-num%} to slot loop-num -1 of event-inventory
+#
+command /chest [<text>] [<text>]:
+    permission: skript.dorong.top_of_admin
+    trigger:
+        if arg 1 is not set:
+            send "어떤 상자를 잠굴지, 열지를 골라주세요"
+            stop
+        if {chest.list::*} contains arg 1:
+            if arg 2 is not set:
+                send "%arg 1% 상자를 열지 말지를 골라주세요"
+                stop
+                if arg 2 is "닫기":
+                    set {chest.open.%arg 1%} to "false"
+                    send "{@logo_rgb} %arg 1% 상자을 여는것을 막았습니다."
+                    stop
+                if arg 2 is "열기":
+                    set {chest.open.%arg 1%} to "true"
+                    send "{@logo_rgb} %arg 1% 상자을 열었습니다."
+                    stop
+        else if arg 1 is "모두":
+            if arg 2 is not set:
+                send "모든 상자를 열지 말지를 골라주세요"
+                stop
+                if arg 2 is "닫기":
+                    set {chest.open.cos} to "false"
+                    set {chest.open.sinsang} to "false"
+                    set {chest.open.sug} to "false"
+                    send "{@logo_rgb} 모든 상자을 여는것을 막았습니다."
+                    stop
+                if arg 2 is "열기":
+                    set {chest.open.%arg 1%} to "true"
+                    send "{@logo_rgb} 모든 상자을 열었습니다."
+                    stop
+#
+command /check_is_key:
+    trigger:
+        if nbt compound of player's tool doesn't have nbt tag "is_key":
+            send "키 여부 확인결과: 키가 아닙니다"
+            stop
+        else:
+            send "키 여부 확인결과: 키가 맞습니다"
+            stop
+#
+command /b [<text>]:
+    trigger:
+        if arg 1 is not set:
+            send "뽑을 상자를 골라주세요"
+            stop
+        set {chest.open.%player%} to "true"
+        if arg 1 is "코스":
+            set {chances.%player%} to {chest.cos::*}
+            set {_chances::*} to 1 random integers between 1 and 100
+            # 1번 아이템
+            if {_chances::1} is between 1 and 5 :
+                set {chest.give.%player%} to {chances.%player%::1}
+            # 2번 아이템
+            if {_chances::1} is between 6 and 10 :
+                set {chest.give.%player%} to {chances.%player%::2}
+            # 3번 아이템
+            if {_chances::1} is between 11 and 15  :
+                set {chest.give.%player%} to {chances.%player%::3}
+            #    
+            if {_chances::1} is between 16 and 100 :
+                set {_chances::*} to 1 random integers between 1 and 100
+                #    
+                if {_chances::1} is between 1 and 25 :
+                    set {chest.give.%player%} to {chances.%player%::4}                #    
+                if {_chances::1} is between 26 and 50 :
+                    set {chest.give.%player%} to {chances.%player%::5}                #    
+                if {_chances::1} is between 51 and 75 :
+                    set {chest.give.%player%} to {chances.%player%::6}                #    
+                if {_chances::1} is between 76 and 100 :
+                    set {chest.give.%player%} to {chances.%player%::7}
+        if arg 1 is "신상":
+            set {chances.%player%} to {chest.sinsang::*}
+            set {_chances::*} to 1 random integers between 1 and 100
+            # 1번 아이템
+            if {_chances::1} is between 1 and 10 :
+                set {chest.give.%player%} to {chances.%player%::1}
+            # 2번 아이템
+            if {_chances::1} is between 11 and 20 :
+                set {chest.give.%player%} to {chances.%player%::2}
+            # 3번 아이템
+            if {_chances::1} is between 21 and 25  :
+                set {chest.give.%player%} to {chances.%player%::3}
+            #    
+            if {_chances::1} is between 26 and 30 :
+                set {chest.give.%player%} to {chances.%player%::4}
+            # 2번 아이템
+            if {_chances::1} is between 31 and 35 :
+                set {chest.give.%player%} to {chances.%player%::5}
+            # 3번 아이템
+            if {_chances::1} is between 36 and 100 :
+                set {_chances::*} to 1 random integers between 1 and 100
+                #    
+                if {_chances::1} is between 1 and 25 :
+                    set {chest.give.%player%} to {chances.%player%::6}                #    
+                if {_chances::1} is between 26 and 50 :
+                    set {chest.give.%player%} to {chances.%player%::7}                #    
+                if {_chances::1} is between 51 and 75 :
+                    set {chest.give.%player%} to {chances.%player%::8}                #    
+                if {_chances::1} is between 76 and 100 :
+                    set {chest.give.%player%} to {chances.%player%::9}
+
+        if arg 1 is "추천":
+            set {chances.%player%} to {chest.sug::*}
+            set {_chances::*} to 1 random integers between 1 and 100
+            # 1번 아이템
+            if {_chances::1} is between 1 and 20 :
+                set {chest.give.%player%} to {chances.%player%::1}
+            # 2번 아이템
+            if {_chances::1} is 21 :
+                set {chest.give.%player%} to {chances.%player%::2}
+            if {_chances::1} is between 22 and 100 :
+                set {_chances::*} to 1 random integers between 1 and 100
+                #    
+                if {_chances::1} is between 1 and 25 :
+                    set {chest.give.%player%} to {chances.%player%::3}                #    
+                if {_chances::1} is between 26 and 50 :
+                    set {chest.give.%player%} to {chances.%player%::4}                #    
+                if {_chances::1} is between 51 and 75 :
+                    set {chest.give.%player%} to {chances.%player%::5}                #    
+                if {_chances::1} is between 76 and 100 :
+                    set {chest.give.%player%} to {chances.%player%::6}
+
+        
+        # 확률 설정법:
+        # =======참고=======
+        # 아이템의 순서를 기반으로 아이템을 제공합니다
+        # 1번째 아이템이 어떤거든지 항상 1번째 아이템을 코드에서 지정한 확률로 제공합니다
+        # 긴급 수정인경우 /chest 모두 닫기 를 하시기 바랍니다
+        # =======설정법=======
+        # 1. 아이템을 인게임에서 설정한다
+        # 2. 코드에서 설정한 아이템의 번호를 찾는다.(1번째 칸에 넣은건 0번이다)
+        # 3. 확률을 설정한다.(1,10 이면 10% 이고 10,27 이면 18% 이다)
+        # 4. 스크립트를 리로드한다.
+
+
+        give {chest.give.%player%} to player
+        remove 1 of player's tool from player's tool
