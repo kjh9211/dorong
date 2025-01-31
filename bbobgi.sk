@@ -201,7 +201,9 @@ command /credit:
         wait 1 seconds
         send "===========Admin==========="
         wait 1 seconds
-        send "sdsd"
+        send "Leaf_Seoma"
+        wait 1 seconds
+        send "Maso"
         wait 1 seconds
         send "=======Top developer======="
         wait 1 seconds
