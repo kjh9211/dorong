@@ -1,0 +1,5 @@
+on damage:
+    victim is player
+    attacker is player
+    damage was caused by arrow
+    cancel event
