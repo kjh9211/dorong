@@ -3,3 +3,7 @@ on damage:
     attacker is player
     damage was caused by arrow
     cancel event
+    if player's tool is bow:
+        player's tool is not a bow of infinity:
+            give arrow to player
+
