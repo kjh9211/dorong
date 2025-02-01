@@ -203,11 +203,11 @@ command /credit:
         wait 1 seconds
         send "Leaf_Seoma"
         wait 1 seconds
-        send "Maso"
+        send "MA5O"
         wait 1 seconds
         send "=======Top developer======="
         wait 1 seconds
-        send "Blue"
+        send "blue_dev"
         wait 1 seconds
         send "=========Developer========="
         wait 1 seconds
@@ -215,10 +215,12 @@ command /credit:
         wait 1 seconds
         send "kjh92111547"
         wait 1 seconds
+        send "SE0JUN"
+        wait 1 seconds
         send "==========================="
         wait 1 seconds
         send "and...."
         wait 1 seconds
-        send "%player% You..."
+        send "You..."
         wait 2 seconds
         send "Thank you for playing!"
